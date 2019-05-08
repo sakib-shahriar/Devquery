@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %} Tag Posts {% endblock %}
+{% block content %}
+    <div class="col-lg-5 col-md-5 col-sm-12 mr-3 mt-3 ">
+        {% include 'partials/_messages.html' %}
+        {% for post, pVote, nVote, comment, tags, voted, saved in posts %}
+            <div class="container post shadow mb-3 white">
+                <div class="post-owner-info">
+                    <div class="row">
+                        <div class="col-10">
+                            <a href="{% url 'profile' post.user.username %}">
+                                {% if post.user.userinfo.image %}
+                                    <img src="{{ post.user.userinfo.image.url }}">&nbsp;
+                                {% else %}
+                                    <img src="{% static 'img/user.png' %}">&nbsp;
+                                {% endif %}
+                                <span class="lead">{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</span>
+                            </a>
+                        </div>
+                        <div class="col-2 text-right">
+                            <div class="dropdown show mt-3">
+                                <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" href="#">Edit</a>
+                                    <a class="dropdown-item" href="#">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <p id="post_id" class="d-none">{{ post.id }}</p>
+                <div class="post-other-info">
+                    <div class="row">
+                        <div class="col-8 mt-3">
+                            <p>{{ post.time | timesince }}</p>
+                        </div>
+                        <div class="col-4">
+                            <div class="text-right p-0">
+                                <button class="btn other-btn savet p-2"><i class="far fa-bookmark"
+                                {% if saved %} style="color: #2962ff;" {% endif %}></i><p class="d-none">{{ post.id }}</p></button>
+                                <button class="btn other-btn p-2"><i class="far fa-envelope"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-description">
+                    <a href="{% url 'post' post.id %}">
+                        <h2 class="d-inline-block">{{ post.title }}</h2>
+                    </a>
+                    <p>{{ post.description }}</p>
+                </div>
+                {% if post.image %}
+                    <div class="post-img-feed text-center mb-3">
+                        <img src="{{ post.image.url }}" alt="">
+                    </div>
+                {% endif %}
+                <div class="post-tags">
+                    {% for tag in tags %}
+                        <button class="btn tag-btn" onclick="location.href='{% url 'tag-post' tag.name %}'">{{ tag.name }}</button>
+                    {% endfor %}
+                </div>
+                <hr>
+
+                <div class="post-status">
+                    <div class="row" id="{{ post.id }}">
+                    <p class="d-none">{{ post.id }}</p>
+                        <div class="col-3 text-left" >
+                            <button {% if voted.vote_direction == "plus"%} style="color:#2962ff;" {% endif %}
+                                    class="btn status-btn" id="plus">
+                                <i class="far fa-plus-square"></i>&nbsp;&nbsp<span>{{ pVote }}</span>
+                            </button>
+
+                        </div>
+                        <div class="col-3 text-left">
+                            <button {% if voted.vote_direction == "minus"%} style="color:#2962ff;" {% endif %}
+                                    class="btn status-btn" id="minus">
+                                <i class="far fa-minus-square"></i>&nbsp;&nbsp;<span>{{ nVote }}</span>
+                            </button>
+                        </div>
+                        <div class="col-6 text-center">
+                            <button class="btn status-btn" onclick="location.href='{% url 'post' post.id %}'">
+                                <i class="far fa-comment"></i>&nbsp;&nbsp;<span>Comment ({{ comment }})</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% include 'partials/_utility.html' %}
+{% endblock %}
+

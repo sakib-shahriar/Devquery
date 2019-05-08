@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Register</title>
+    <link href="{% static 'vendor/css/material-design-iconic-font.min.css' %}" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+    <link href="{% static 'vendor/css/select2.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'vendor/css/signup.css' %}" rel="stylesheet" media="all">
+    <style>body,html{ background-image: url("{% static 'img/login_cover.jpg' %}");background-size: cover;}</style>
+
+</head>
+<body>
+<div class="page-wrapper  p-t-45 p-b-50">
+    <div class="wrapper wrapper--w790">
+        <div class="card card-5">
+            <div class="card-heading">
+                <h2 class="title">Devquery Registration</h2>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'register' %}" id="form-register" enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                    <div class="form-row m-b-55">
+                        <div class="name">Name</div>
+                        <div class="value">
+                            <div class="row row-space">
+                                <div class="col-2">
+                                    <div class="input-group-desc">
+                                        <input class="input--style-5" type="text" name="first-name" required>
+                                        <label class="label--desc">first name</label>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="input-group-desc">
+                                        <input class="input--style-5" type="text" name="last-name" required>
+                                        <label class="label--desc">last name</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="name">User Name</div>
+                        <div class="value">
+                            <div class="input-group">
+                                <input class="input--style-5" type="text" id="username-register" name="user-name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="name">Email</div>
+                        <div class="value">
+                            <div class="input-group">
+                                <input class="input--style-5" type="email" id="email-register" name="email" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="name">Password</div>
+                        <div class="value">
+                            <div class="input-group">
+                                <input class="input--style-5" type="password" name="password" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="name">Profile Photo (optional)</div>
+                        <div class="value">
+                            <div class="input-group">
+                                <input class="input--style-5" type="file" name="image">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label label--block">Choose Your Favorite tags (At least 2)</label> <br><br>
+                        {% for tag in tags %}
+                            <input type="checkbox" class="my_chk" name="tags[]" value="{{ tag }}"><span class="my_span">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    <div>
+                        <button class="btn btn--radius-2 btn--red" id="form-btn" type="submit">Register</button>
+                    </div>
+                    <p class="msg"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'vendor/js/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/js/jquery-ui.js' %}"></script>
+<script src="{% static 'vendor/js/jquery.autoresize.js' %}"></script>
+<script src="{% static 'vendor/js/popper.min.js' %}"></script>
+
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

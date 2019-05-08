@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'vendor/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/css/login.css' %}">
+    <style>body,html{ background-image: url("{% static 'img/login_cover.jpg' %}");background-size: cover;}</style>
+</head>
+<body>
+<header class="mt-5">
+    <h1 class="text-center text-light display-4">Devquery</h1>
+    <p class="text-center lead text-light">An online community for Dev Peoples!</p>
+</header>
+<div class="container">
+    <div class="h-100 mt-5 py-5">
+        <div class="card">
+            <div class="card-header">
+                <h3>Sign In</h3>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'login' %}" id="form-login" method="post">
+                    {% csrf_token %}
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="username-login" name="user-name" placeholder="username" required>
+
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input type="password" class="form-control" id="password-login" name="password" placeholder="password" required>
+                    </div>
+                    {% for message in messages %}
+                        <p class="msg-login text-light">{{ message }}</p>
+                    {% endfor %}
+                    <div class="form-group">
+                        <input type="submit" value="Login" class="btn float-right login_btn">
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-center links">
+                    Don't have an account?<a href="{% url 'register' %}">Register</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="{% static 'vendor/js/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/js/jquery-ui.js' %}"></script>
+<script src="{% static 'vendor/js/jquery.autoresize.js' %}"></script>
+<script src="{% static 'vendor/js/popper.min.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
+

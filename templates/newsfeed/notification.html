@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Notifications {% endblock %}
+{% block content %}
+    <div class="col-lg-6 col-md-6 col-sm-12 mt-3 ">
+        <div class="container shadow py-3 mb-3 white notf-all">
+            {% for notification in notifications %}
+                <a {% if notification.is_read%} class="text-decoration-none post-small post-small-notf shadow-lg mb-2"
+                {% else %} class="text-decoration-none post-small post-small-notf shadow-lg mb-2 not-read"{% endif %}
+                        {% if notification.notf_type == "follow" %} href="{% url 'make_read' notification.owner.username notification.id 'profile' %}"
+                        {% else %} href="{% url 'make_read' notification.post.id notification.id 'post' %}" {% endif %}>
+                    <div class="row px-3 py-2">
+                        <div class="col-3 post-small-owner text-decoration-none">
+                            {% if notification.maker.userinfo.image %}
+                                <img src="{{ notification.maker.userinfo.image.url }}">
+                            {% else %}
+                                <img src="{% static 'img/user.png' %}">
+                            {% endif %}
+                        </div>
+                        <div class="col-9 post-small-title">
+                            <h5 class="text-justify"> {{ notification.notification }}</h5>
+                            <p class="lead font-italic">{{ notification.time | timesince }}</p>
+                        </div>
+                    </div>
+                <p id="notf-id" class="d-none">{{ notification.id }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

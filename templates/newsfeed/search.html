@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %} Search {% endblock %}
+{% block content %}
+    <div class="col-lg-6 col-md-6 col-sm-12 mt-3 ">
+        {% include 'partials/_messages.html' %}
+        <div class="container shadow py-3 mb-3 white">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">User</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Post</a>
+                </li>
+            </ul>
+        </div>
+        <div class="container post shadow mb-3 white">
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="row">
+                        {% for user in users %}
+                            <div class="col-5 mb-4">
+                                <div class="card shadow pt-3" style="width: 100%; background-color:#fafafa;">
+                                    <div class="text-center">
+                                        {% if user.userinfo.image %}
+                                            <img class="card-img-top img-card" src="{{ user.userinfo.image.url }}" alt="Card image cap">
+                                        {% else %}
+                                            <img class="card-img-top img-card" src="{% static 'img/user.png' %}" alt="Card image cap">
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="card-body">
+                                        <h6 class="card-title text-center">{{ user.first_name }}&nbsp;{{ user.last_name }}</h6>
+                                        <p class="card-text text-center font-italic">{{ user.userinfo.profile_tag }}</p>
+                                        <p class="card-text"><strong>Joined:</strong> {{ user.date_joined | timesince}}</p>
+                                        <a href="{% url 'profile' user.username %}" class="btn btn-primary">View Profile</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    {% for post in posts %}
+                        <a class="text-decoration-none post-small shadow-lg mb-3" href="{% url 'post' post.id %}">
+                            <div class="p-3">
+                                <div class="post-small-owner text-decoration-none">
+                                    {% if post.user.userinfo.image %}
+                                        <img src="{{ post.user.userinfo.image.url }}">
+                                    {% else %}
+                                        <img src="{% static 'img/user.png' %}">
+                                    {% endif %}
+                                    <span>{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</span>
+                                </div>
+                                <div class="post-small-title py-2">
+                                    <h5 class="text-justify"> {{ post.title }}</h5>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %} Post {% endblock %}
+{% block content %}
+    <div class="col-lg-6 col-md-6 col-sm-12 mt-3 ">
+        <div class="container post shadow mb-3 white">
+            <div>
+                <div class="row">
+                    <div class="col-6 text-left inside-post-other-info">
+                        <button class="btn other-btn savet p-2"><i class="far fa-bookmark"
+                                {% if saved %} style="color: #2962ff;" {% endif %}></i><p class="d-none">{{ post.id }}</p></button>
+                        <button class="btn other-btn p-2"><i class="far fa-envelope"></i></button>
+                    </div>
+                    <div class="col-6 text-right">
+                        <div class="dropdown show mt-3">
+                            <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="post-info">
+                <div class="post-title px-3">
+                    <h2 class="text-center mb-3">{{ post.title }}</h2>
+                </div>
+                <div class="inside-post-owner-info">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <a href="{% url 'profile' post.user.username %}">{% if post.user.userinfo.image %}
+                                <img src="{{ post.user.userinfo.image.url }}">&nbsp;
+                            {% else %}
+                                <img src="{% static 'img/user.png' %}">&nbsp;
+                            {% endif %}</a>
+                            <a href="{% url 'profile' post.user.username %}">
+                                <p class="lead">{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-time">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <p>{{ post.time | timesince }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="inside-post-tag text-center">
+                    {% for tag in tags %}
+                        <button class="btn tag-btn " onclick="location.href='{% url 'tag-post' tag.name %}'">{{ tag.name }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if post.image %}
+                <div class="post-img mt-5">
+                    <img src="{{ post.image.url }}" alt="">
+                </div>
+            {% endif %}
+            <div class="post-description mt-5">
+                <p class="text-justify">{{ post.description }}</p>
+            </div>
+            <hr>
+            <div class="post-status">
+                <div class="row">
+                    <p class="d-none">{{ post.id }}</p>
+                    <div class="col-3 text-left">
+                        <button {% if myVote.vote_direction == "plus"%} style="color:#2962ff;" {% endif %}
+                                                                        class="btn status-btn" id="plus">
+                            <i class="far fa-plus-square"></i>&nbsp;&nbsp;<span>{{ pVote }}</span>
+                        </button>
+                    </div>
+                    <div class="col-3 text-left">
+                        <button {% if myVote.vote_direction == "minus"%} style="color:#2962ff;" {% endif %}
+                                                                         class="btn status-btn" id="minus">
+                            <i class="far fa-minus-square"></i>&nbsp;&nbsp;<span>{{ nVote }}</span>
+                        </button>
+                    </div>
+                    <div class="col-6 text-center">
+                        <button class="btn status-btn">
+                            <i class="far fa-comment"></i>&nbsp;&nbsp;<span>Comment ({{ comments.comments|length }})</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {#--------------------------------Comment Template Start---------------------------------------#}
+
+        <div class="mb-5 comment-template" style="display: none;">
+            <div class="border-thick shadow-sm pt-2">
+                <div class="container">
+                    <div class="row comment-owner">
+                        <div class="col-xl-6 col-lg-6 col-md-10">
+                            <a href="#" id="temp-comment-link"><img src="user.png" alt="">&nbsp;&nbsp;<span>John Doe</span></a>
+                        </div>
+                        <div class="input-group">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div>
+                        <p class="px-3 temp-comment"></p>
+                    </div>
+
+                    <div class="post-status">
+                        <div class="row">
+                            <p class="d-none temp-comment-id" id="comment-id"></p>
+                            <div class="col-3 text-left">
+                                <button class="btn comment-status-btn" id="plus">
+                                    <i class="far fa-plus-square"></i>&nbsp;&nbsp;<span>0</span>
+                                </button>
+                            </div>
+                            <div class="col-3 text-left">
+                                <button class="btn comment-status-btn" id="minus">
+                                    <i class="far fa-minus-square"></i>&nbsp;&nbsp;<span>0</span>
+                                </button>
+                            </div>
+                            <div class="col-6 text-center">
+                                <button class="btn comment-status-btn" id="toggle-btn" type="button" data-toggle="collapse" data-target="#" aria-expanded="false" aria-controls="collapseExample"
+                                        style="width: 80%;">
+                                    <i class="far fa-comment"></i>&nbsp;&nbsp;<span>Reply</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="collapse" id="temp-collapse">
+                    <div class="container pt-4">
+                        <div class="input-group">
+                            <textarea class="form-control" placeholder="Write your reply" aria-label="With textarea"
+                                      id="text-area-reply"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="reply-box">
+
+            </div>
+        </div>
+
+
+        {#--------------------------------Comment Template End---------------------------------------#}
+
+{#-----------------------------------Reply template Start--------------------------------------#}
+        <div class="mt-4 border-thick shadow-sm pt-2 mt-3 mb-5 reply reply-template" style="display: none;">
+            <div class="container">
+                <div class="row comment-owner rep">
+                    <div class="col-xl-6 col-lg-6 col-md-10">
+                        <a href="#" id="temp-reply-link"><img id="temp-reply-img" src="">
+                            <span id="temp-reply-name"></span></a>
+                    </div>
+                    <div class="input-group"></div>
+                </div>
+            </div>
+            <div class="container">
+                <div>
+                    <p class="px-3" id="temp-reply"></p>
+                </div>
+            </div>
+        </div>
+
+{#-----------------------------------Reply template End--------------------------------------#}
+
+
+
+    <p id="post_id" class="d-none">{{ post.id }}</p>
+
+        <div class="container comment shadow white">
+            <div class="container">
+                <div class="row pt-3 pb-4">
+                    <div class="col-xl-2 col-lg-3 col-md-4">
+                        {% if  user_profile_pic %}
+                            <img src="{{ user_profile_pic.url }}">
+                        {% else %}
+                            <img src="{% static 'img/user.png' %}">
+                        {% endif %}
+                    </div>
+                    <div class="col-xl-10 col-lg-9 col-md-8 mt-1">
+
+                        <div class="input-group">
+                                    <textarea class="form-control" placeholder="Write your comment"
+                                              aria-label="With textarea" id="text-area-comment"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="comment-space temp-class">
+                {% for comment, replies, cpvVote, cnVote, voted in comments %}
+                    <div class="mb-5 temp-class-alt">
+                        <div class="border-thick shadow-sm pt-2">
+                            <div class="container">
+                                <div class="row comment-owner">
+                                    <div class="col-xl-6 col-lg-6 col-md-10">
+                                        <a href="{% url 'profile' comment.user.username%}">{% if  comment.user.userinfo.image %}
+                                            <img src="{{ comment.user.userinfo.image.url }}">
+                                        {% else %}
+                                            <img src="{% static 'img/user.png' %}">
+                                        {% endif %}<span>{{ comment.user.first_name }}&nbsp;{{ comment.user.last_name }}</span></a>
+                                    </div>
+                                    <div class="input-group">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div>
+                                    <p class="px-3">{{ comment.comment }}</p>
+                                </div>
+
+                                <div class="post-status">
+                                    <div class="row">
+                                        <p class="d-none">{{ comment.id }}</p>
+                                        <div class="col-3 text-left">
+                                            <button {% if voted.vote_direction == "plus"%} style="color:#2962ff;" {% endif %}
+                                                                                           class="btn comment-status-btn" id="plus">
+                                                <i class="far fa-plus-square"></i>&nbsp;&nbsp;<span>{{ cpvVote }}</span>
+                                            </button>
+                                        </div>
+                                        <div class="col-3 text-left">
+                                            <button {% if voted.vote_direction == "minus"%} style="color:#2962ff;" {% endif %}
+                                                                                            class="btn comment-status-btn" id="minus">
+                                                <i class="far fa-minus-square"></i>&nbsp;&nbsp;<span>{{ cnVote }}</span>
+                                            </button>
+                                        </div>
+                                        <div class="col-6 text-center">
+                                            <button class="btn comment-status-btn" type="button" data-toggle="collapse" data-target="#{{ comment.id }}" aria-expanded="false" aria-controls="collapseExample"
+                                                    style="width: 80%;">
+                                                <i class="far fa-comment"></i>&nbsp;&nbsp;<span>Reply</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="collapse" id={{ comment.id }}>
+                                <div class="container pt-4">
+                                    <div class="input-group">
+                                        <textarea class="form-control" placeholder="Write your reply" aria-label="With textarea" id="text-area-reply"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reply-box">
+                            {% for reply in replies %}
+                                <div class="mt-4 border-thick shadow-sm pt-2 mt-3 mb-5 reply">
+                                    <div class="container">
+                                        <div class="row comment-owner rep">
+                                            <div class="col-xl-6 col-lg-6 col-md-10">
+                                                <a href="{% url 'profile' reply.user.username%}">{% if  reply.user.userinfo.image %}
+                                                    <img src="{{ reply.user.userinfo.image.url }}">
+                                                {% else %}
+                                                    <img src="{% static 'img/user.png' %}">
+                                                {% endif %}<span>{{ reply.user.first_name }}&nbsp;{{ reply.user.last_name }}</span></a>
+                                            </div>
+                                            <div class="input-group"></div>
+                                        </div>
+                                    </div>
+                                    <div class="container">
+                                        <div>
+                                            <p class="px-3">{{ reply.reply }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <hr>
+        </div>
+        <div></div>
+    </div>
+    <script>
+    </script>
+{% endblock %}

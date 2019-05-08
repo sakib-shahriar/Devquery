@@ -1,0 +1,43 @@
+{% load static %}
+<div class="col-lg-3 col-md-3 col-sm-12 mr-2 mt-3 px-4">
+    <div class="container shadow white">
+        <div class="side-profile">
+            <div class="side-profle-pic my-3">
+                {% if  user_profile_pic %}
+                    <img src="{{ user_profile_pic.url }}">
+                {% else %}
+                    <img src="{% static 'img/user.png' %}">
+                {% endif %}
+            </div>
+            <div class="side-profile-info">
+                <h3 class="text-center">{{ user.first_name }}&nbsp;{{ user.last_name }}</h3>
+                <p class="text-center text-capitalize font-italic lead ">{{ user.userinfo.profile_tag }}</p>
+            </div>
+            <hr>
+        </div>
+        <div class="side-menu ">
+            <ul class="list-unstyled">
+                <li><a href="{% url 'index' %}"><i class="fas fa-home"></i><span>Home</span></a></li>
+                <li><a href="{% url 'create' %}">&nbsp;<i class="fas fa-clipboard"></i>&nbsp;<span>Post</span></a></li>
+                <li><a href="{% url 'profile' user.username %}"><i class="fas fa-id-card"></i><span>Profile</span></a></li>
+                <li><a href="#"><i class="far fa-envelope-open"></i>&nbsp;<span>Messages</span></a></li>
+                <li><a href="{% url 'saved' %}"><i class="far fa-save"></i>&nbsp;<span>Saved</span></a></li>
+                <li><a href="{% url 'setting' %}"><i class="fas fa-cog"></i>&nbsp;<span>Setting</span></a></li>
+            </ul>
+            <hr class="my-3">
+        </div>
+        <div class="side-others">
+            <p>&copy; 2019 . Devquery</p>
+            <div class="mb-3">
+                <a href="#">Send Feedback</a>
+                <a href="#">Report Bug</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Media</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+            </div>
+
+        </div>
+    </div>
+</div>

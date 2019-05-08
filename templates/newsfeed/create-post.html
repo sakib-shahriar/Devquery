@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title%} Create {% endblock %}
+{% block content %}
+    <div class="col-lg-6 col-md-6 col-sm-12 mt-3 ">
+        <div class="container create-post shadow white create">
+            <div class="p-5">
+                <form action="{% url 'create' %}" enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="title">Enter Title</label>
+                        <input type="text" class="form-control" name="title" id="title" placeholder="Title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Add Description</label>
+                        <textarea class="form-control" placeholder="Description" name="description"
+                                  id="description" rows="8"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="photo">Add photo (optional)</label>
+                        <input type="file" class="form-control-file"  name="image" id="photo">
+                    </div>
+                    <div class="form-group">
+                        <label for="tag">Add tags (optional)</label>
+                        <input type="text" class="form-control" id="tag" name="tag" placeholder="Tag">
+                    </div>
+                    <button type="submit" class="btn btn-primary post-btn mb-2">Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

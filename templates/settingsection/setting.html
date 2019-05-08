@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Account Setting {% endblock %}
+{% block content %}
+    <div class="col-lg-5 col-md-5 col-sm-12 mr-3 mt-3 ">
+        <div class="container post shadow mb-4 white setting">
+            <h2 class="text-center mb-4 light">Account Setting</h2>
+            <form action="{% url 'setting' %}" enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">First Name</label>
+                    <input type="text" class="form-control" name="first-name" value="{{ user.first_name }}" placeholder="First Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="title">Last Name</label>
+                    <input type="text" class="form-control" name="last-name" value="{{ user.last_name }}" placeholder="Last Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="Image">Change Profile Picture</label>
+                    <input type="file" class="form-control-file"  name="image" id="image">
+                </div>
+                <div class="form-group">
+                    <label for="tag">Profile Tag</label>
+                    <input type="text" class="form-control" name="profile-tag" value="{{ user.userinfo.profile_tag }}" size="20" placeholder="Profile Tag">
+                </div>
+                <div class="form-group">
+                    <label for="about">About</label>
+                    <input type="text" class="form-control" name="about" value="{{ user.userinfo.about }}" size="150" placeholder="About">
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" class="form-control" name="location" value="{{ user.userinfo.location }}" size="50" placeholder="Location">
+                </div>
+                <div class="form-group">
+                    <label for="protfolio">Portfolio</label>
+                    <input type="text" class="form-control" name="portfolio" value="{{ user.userinfo.portfolio }}" size="80" placeholder="Portfolio Address">
+                </div>
+                <div class="form-group mt-4">
+                    <p>Update Interest</p>
+                    {% for tag in tags %}
+                        <input type="checkbox" class="d-inline-block mr-2 mb-3" value="{{ tag }}" name="tags[]" id="tags"
+                                {% if tag in my_tags %} checked {% endif %}><span class="mb-3">{{ tag }}</span>&nbsp;&nbsp;
+                    {% endfor %}
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success my-3 update-btn">Update Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

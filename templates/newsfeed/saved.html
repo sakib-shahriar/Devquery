@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Saved {% endblock %}
+{% block content %}
+    <div class="col-lg-6 col-md-6 col-sm-12 mt-3 ">
+        <div class="container shadow py-3 mb-3 white">
+            {% for post in posts %}
+                <a class="text-decoration-none post-small shadow-lg mb-3" href="{% url 'post' post.id %}">
+                    <div class="p-3">
+                        <div class="post-small-owner text-decoration-none">
+                            {% if post.user.userinfo.image %}
+                                <img src="{{ post.user.userinfo.image.url }}">
+                            {% else %}
+                                <img src="{% static 'img/user.png' %}">
+                            {% endif %}
+                            <span>{{ post.user.first_name }}&nbsp;{{ post.user.last_name }}</span>
+                        </div>
+                        <div class="post-small-title py-2">
+                            <h5 class="text-justify"> {{ post.title }}</h5>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

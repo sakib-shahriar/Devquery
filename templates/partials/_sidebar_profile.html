@@ -1,0 +1,76 @@
+{% load static %}
+{% load humanize %}
+<div class="col-lg-4 col-md-4 col-xl-4 col-sm-12 mr-2 mt-3 px-4">
+    <div class="container shadow white px-5">
+        <div class="side-profile">
+            <div class="side-profle-pic my-3">
+                {% if  usr.userinfo.image %}
+                    <img src="{{ usr.userinfo.image.url }}">
+                {% else %}
+                    <img src="{% static 'img/user.png' %}">
+                {% endif %}
+            </div>
+            <div class="side-profile-info">
+                <h3 class="text-center">{{ usr.first_name }}&nbsp;{{ usr.last_name }}</h3>
+                <p class="text-center font-italic">@{{ usr.username }}</p>
+                <p class="text-center text-capitalize font-italic lead ">{{ usr.userinfo.profile_tag }}</p>
+                <div class="text-center temp-follow-msg">
+                    {% if usr == user %}
+                        <button class="btn btn-primary mr-3 side-btn-user" onclick="location.href='{% url 'setting' %}'">Edit Profile</button>
+                    {% else %}
+                        {% if user_following %}
+                            <button class="btn btn-primary mr-3 side-btn" id="{{ usr.id }}">Following</button>
+                        {% else %}
+                            <button class="btn btn-primary mr-3 side-btn" id="{{ usr.id }}">Follow</button>
+                        {% endif %}
+                        <button class="btn btn-primary side-btn">Message</button>
+                    {% endif %}
+
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="side-follow pt-2 pb-3">
+            <div class="row text-center">
+                <div class="col score-unit">
+                    <p class="light font-weight-light">Following</p>
+                    <h3 class="font-weight-bold">{{ following }}</h3>
+                </div>
+                <div class="col score-unit m-0">
+                    <p class="light font-weight-light">Follower</p>
+                    <h3 class="font-weight-bold">{{ follower }}</h3>
+                </div>
+
+            </div>
+        </div>
+        <hr>
+        <div class="side-info py-2">
+            <p><i class="far fa-calendar-alt"></i><span class="light">Joined: &nbsp;</span>{{ usr.date_joined | timesince}}</p>
+            <p><i class="fas fa-map-marker"></i><span class="light">Location: &nbsp;</span>
+            {% if user.userinfo.location %}{{ usr.userinfo.location }}{% endif %}</p>
+            <p><i class="far fa-id-badge"></i><span class="light">Portfolio: &nbsp;</span>
+            {% if user.userinfo.portfolio %}{{ usr.userinfo.portfolio }}{% endif %}</p>
+            <p></p>
+        </div>
+        <hr>
+        <div class="side-social text-center">
+            <p class="text-center lead light">Interest</p>
+            {% for tag in interest %}
+                <button class="btn tag-btn mb-2">{{ tag.tag }}</button>
+            {% endfor %}
+        </div>
+        <hr>
+        <div class="side-others">
+            <p>&copy; 2019 . Devquery</p>
+            <div class="mb-3">
+                <a href="#">Send Feedback</a>
+                <a href="#">Report Bug</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Media</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+            </div>
+        </div>
+    </div>
+</div>

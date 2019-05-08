@@ -1,0 +1,434 @@
+.white{
+    background-color: white;
+}
+.light{
+    color: #4d4d4d;
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+body{
+    background-color: #f2f2f2;
+}
+.main-container{
+    padding-left: 20%;
+    padding-right: 4%;
+}
+.side-profile, .side-menu, .side-others{
+    padding: 5%;
+}
+
+.side-profle-pic img{
+    width: 100px;
+    height: 100px;
+    margin: 0% auto;
+    display: block;
+    border-radius: 50%;
+}
+.menu-icon{
+    font-size: 25px;
+    display: block;
+}
+.list-unstyled li a{
+    display: block;
+    text-decoration: none;
+    height: 5%;
+    width: 100%;
+    padding: 4% 0%;
+}
+.list-unstyled li a:link, .list-unstyled li a:visited{
+    color:black;
+    transition: background-color 0.2s;
+}
+.list-unstyled li a:hover, .list-unstyled li a:active{
+   color: #2962ff;
+   background-color: #f7f7f7
+}
+.list-unstyled li a i{
+    font-size: 115%;
+    margin-right: 7%;
+    margin-left: 5%;
+}
+.list-unstyled li a:link i,.list-unstyled li a:visited i {
+    color: #808080;
+    transition: background-color 0.2s;
+}
+.list-unstyled li a:hover i,.list-unstyled li a:active i {
+    color: #2962ff;
+}
+.side-others div a{
+    display: inline-block;
+    text-decoration: none;
+    margin: 2%;
+}
+.side-others div a:link, .side-others div a:visited{
+    color: black;
+}
+.side-others div a:hover, .side-others div a:active{
+    color: #2962ff;
+}
+.post, create-post{
+    padding: 5%;
+}
+.post-owner-info div div a img{
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+.post-owner-info div div a{
+    text-decoration: none;
+    color: black;
+}
+.post-owner-info div div a:hover,.post-owner-info div div a:active{
+    color: #2962ff;
+}
+#dropdownMenuLink i{
+    font-size: 130%;
+}
+#dropdownMenuLink:link i, #dropdownMenuLink:visited i{
+    color: #808080;
+}
+#dropdownMenuLink:hover i, #dropdownMenuLink:active i{
+    color: #2962ff;
+}
+.post-other-info div:last-child div a i{
+    font-size: 165%;
+}
+.post-other-info div:last-child div a:link i, .post-other-info div:last-child div a:visited i{
+    color: #808080;
+}
+.post-other-info div:last-child div a:hover i, .post-other-info div:last-child div a:active i{
+    color: #2962ff;
+}
+.post-description a{
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 2%;
+    font-family:georgia;
+}
+.post-description a:link, .post-description a:visited{
+    color: black;
+}
+.post-description a:hover, .post-description a:active{
+    color: #2962ff;
+}
+.post-status{
+    margin: -2% 0px;
+}
+.status-btn{
+    background-color:transparent;
+    color: black;
+}
+.tag-btn{
+    background-color: #f2f2f2;
+    border-radius: 30px;
+    padding: 7px 15px;
+    margin-right: 10px;
+}
+.tag-btn:focus{
+    box-shadow: none;
+}
+.post-status div div button{
+    width: 100%;
+}
+.post-status div div button:hover{
+    background-color: #f2f2f2;
+}
+.post-status div div button:focus{
+    box-shadow: none;
+}
+.post-status div div button i{
+    font-size: 120%;
+}
+#drop-down{
+    margin-left: 95%;
+}
+.inside-post-owner-info div div{
+    margin: 0 auto;
+
+}
+.inside-post-owner-info a img{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+.inside-post-other-info a i{
+    font-size: 165%;
+    margin-top: 5px;
+}
+.inside-post-other-info a:link i, .post-other-info a:visited i{
+    color: #808080;
+}
+.inside-post-other-info a:hover i, .post-other-info a:active i{
+    color: #2962ff;
+}
+.inside-post-owner-info div div a{
+    text-decoration: none;
+}
+#text-area-comment, #text-area-reply {
+    border: 0 none white;
+    border-radius: 7px 13px;
+    overflow: hidden;
+    padding: 0;
+    outline: none;
+    background-color: #f2f2f2;
+    resize: none;
+    width: 500px;
+    box-shadow: none;
+  }
+  .comment div div div img{
+    display: inline-block;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+  }
+  .comment div div div:last-child{
+      padding: 0;
+  }
+  .comment-owner div a:link, .comment-owner a:visited{
+      color: black;
+      text-decoration: none;
+  }
+  .comment-owner div a:hover, .comment-owner a:active{
+    color: #2962ff;
+  }
+  .comment-owner div a{
+
+  }
+  .comment-owner div img{
+    display: inline-block;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+  }
+  .border-thick{
+      border-radius: 7px 13px;
+      background-color: #f2f2f2
+  }
+  .post-img{
+      text-align: center;
+  }
+  .post-img img{
+        width: 80%;
+        height: auto;
+  }
+
+  .rep div img{
+    display: inline-block;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+  }
+.reply{
+    width: 85%;
+    margin-left: 15%;
+}
+#text-area-reply{
+    width: 85%;
+    margin-left: 14%;
+}
+.comment-status-btn{
+    background-color:transparent;
+    color: black;
+}
+.post-img-feed img{
+    width: 90%;
+    height: auto;
+}
+.nav-logo img{
+    display: inline-block;
+    height: 40px;
+}
+.nav-link i{
+    font-size: 170%;
+}
+.nav-search{
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: darkgray;
+    background-color: #f8f9fa !important;
+    width: 400px;
+}
+.nav-search:focus{
+    border-color: #51b6ee;
+    box-shadow: none;
+}
+.img-card{
+    width: 100px;
+    height: 100px;
+    border-radius:50%;
+}
+.post-small-owner img{
+    display: inline-block;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}
+.post-small{
+    display: block;
+    color: #222;
+    text-decoration: none;
+    border: 1px solid #d8d8d8;
+}
+.post-small:link, .post-small:visited{
+    background-color: #fafafa;
+}
+.post-small:hover, .post-small:active{
+    color: #222;
+    background-color: #eaeaea;
+    text-decoration: none;
+}
+
+.other-btn{
+    display: inline-block;
+    background-color: transparent;
+    font-size: 165%;
+    color: #808080;
+    margin: 0;
+}
+.other-btn:focus{
+    box-shadow: none;
+}
+.other-btn:hover{
+    color: #2962ff;
+}
+.side-btn:focus, .side-btn-user:focus{
+    box-shadow: none;
+}
+.side-follow p, .side-follow h3{
+    margin: 0;
+}
+
+.side-info i{
+    font-size: 120%;
+    color: #808080;
+    margin-right: 15px;
+}
+.side-btn-user{
+    border-radius: 30px;
+    width: 150px;
+    font-size: 100%;
+}
+.setting input, .create input, .create textarea{
+    border-radius: 10px;
+}
+.update-btn{
+    display: inline-block;
+    width: 200px;
+    border-radius: 30px;
+}
+.update-btn:focus{
+    box-shadow: none;
+}
+.post-btn{
+    display: inline-block;
+    width: 100px;
+    border-radius: 30px;
+}
+@media only screen and (min-width: 1310px) {
+    .side-btn{
+        border-radius: 30px;
+        width: 70px;
+        font-size: 70%;
+    }
+}
+@media only screen and (min-width: 1545px) {
+    .side-btn{
+        border-radius: 30px;
+        width: 90px;
+        font-size: 90%;
+    }
+}
+
+.drop{
+    position: relative;
+}
+
+.dropdown-menu.notifi {
+    position: absolute;
+    top: 50px;
+    border-color:#2962ff;
+    left: -400px;
+    background: #fff;
+    width: 450px;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+.notifi div a{
+    text-decoration: none;
+    background: #fff;
+    width: 100%;
+    display: block;
+    margin: 0px;
+    padding: 7px 7px;
+
+}
+.notifi .comment{
+    padding: 0px !important;
+}
+
+.notifi div a:hover{
+    padding: 7px 7px;
+    margin: 0px;
+    background: #e9e9e9;
+    cursor: pointer;
+}
+.not-read{
+    background: #edf2fa !important;
+}
+.not-read:hover{
+    background: #dfe9f7 !important;
+}
+
+i.far.fa-bell {
+   cursor: pointer;
+}
+
+.badge{
+    position: absolute;
+    top: 2px;
+    right: 6px;
+    font-size: 10px;
+    cursor: pointer;
+    line-height: 15px;
+    background-color: red;
+    padding: 0 4px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.col-btn button{
+    outline: none;
+    background: #599fff;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.col-btn button:hover{
+    background: #378bff;
+}
+
+.notifi .col a img{
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+
+}
+
+.notifi .col a p{
+    display: inline-block;
+    padding-left: 10px;
+}
+.notifi .col a span{
+    padding-left: 10px;
+}

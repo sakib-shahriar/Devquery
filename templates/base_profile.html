@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/css/easy-autocomplete.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'vendor/css/jquery-ui.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<body>
+{% include 'partials/_navbar.html' %}
+<div class="container-fluid main-container">
+    <div class="row">
+        {% include 'partials/_sidebar_profile.html' %}
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+<script src="{% static 'vendor/js/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/js/popper.min.js' %}"></script>
+<script src="{% static 'vendor/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'vendor/js/jquery-ui.js' %}"></script>
+<script src="{% static 'vendor/js/jquery.autoresize.js' %}"></script>
+<script src="{% static 'vendor/js/jquery.easy-autocomplete.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
