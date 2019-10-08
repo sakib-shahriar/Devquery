@@ -1,4 +1,4 @@
-let sendRequest = (data, url, requestType, async, callback) => {
+const sendRequest = (data, url, requestType, async, callback) => {
     $.ajax({
             type: requestType,
             async: async,

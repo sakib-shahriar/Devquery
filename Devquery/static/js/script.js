@@ -111,7 +111,6 @@ $( document ).ready(function() {
                         comp.parent().next().children("button").css('color','black')
                     }
                     else {
-
                         var vote = parseInt(comp.parent().prev().children("button").children("span").html())
                         comp.parent().prev().children("button").children("span").html(vote - 1)
                         comp.parent().prev().children("button").css('color','black')
@@ -125,137 +124,119 @@ $( document ).ready(function() {
         })
     })
 
-    $("#text-area-comment").keypress(function (e) {
-        var key = e.which;
-        if(key == 13) {
-            var comment = $(this).val()
-            if(comment == "") return
-            var post_id = $("#post_id").html()
-            var action = "make_comment"
-            $.ajax({
-                type: "GET",
-                url: '/ajax',
-                data: {
-                    action: action,
-                    post_id: post_id,
-                    comment: comment,
-                },
-                success: $.proxy(function(data) {
-                    $(this).val("")
-                    var comment_template  = $(".comment-template").clone()
-                    comment_template.css("display", "block")
-                    comment_template.find("img").attr("src", data.user_image)
-                    comment_template.find("#temp-comment-link").attr("href", data.url)
-                    comment_template.find("img").next().html(data.user_name)
-                    comment_template.find(".temp-comment").html(data.comment)
-                    comment_template.find("#toggle-btn").attr("data-target","#"+data.cmt_id)
-                    comment_template.find("#temp-collapse").attr("id",data.cmt_id)
-                    comment_template.find(".temp-comment-id").html(data.cmt_id)
-                    $(".comment-space").append(comment_template)
-                }, this)
-            })
+    $("#text-area-comment").on('keypress', (e) => {
+        const _el = $("#text-area-comment");
+        const key = e.which;
+        if (key == 13) {
+            const comment = $(_el).val();
+            if (comment == "") return;
+            const data = {
+                post_id: $("#post_id").html(),
+                action: "make_comment",
+                comment: comment
+            };
+            const url = '/ajax';
+            const requestType = "GET";
+            const async = false;
+            const callback = (data) => {
+                _el.val("");
+                const commentTemplate  = $(".comment-template").clone();
+                commentTemplate.css("display", "block");
+                commentTemplate.find("img").attr("src", data.user_image)
+                commentTemplate.find("#temp-comment-link").attr("href", data.url)
+                commentTemplate.find("img").next().html(data.user_name)
+                commentTemplate.find(".temp-comment").html(data.comment)
+                commentTemplate.find("#toggle-btn").attr("data-target","#"+data.cmt_id)
+                commentTemplate.find("#temp-collapse").attr("id",data.cmt_id)
+                commentTemplate.find(".temp-comment-id").html(data.cmt_id)
+                $(".comment-space").append(commentTemplate)
+            };
+            sendRequest(data, url, requestType, async, callback);
         }
-    })
+    });
 
-    $(function(){
+    $(() => {
         $('textarea').autoResize({
             'minRows': 2,
             'maxRows': 0
         })
 
-    })
-
+    });
 
     $( ".nav-search" ).autocomplete({
-        source: function( request, response ) {
-            var text = $(".nav-search").val()
-            $.ajax({
-                type: "GET",
-                url: '/ajax',
-                dataType: "json",
-                data: {
-                    text: text,
-                    action: "search_suggestion",
-                },
-                success: function (data) {
-                    response(data);
-                }
-            });
+        source: (request, response) => {
+            const data = {
+                text: $(".nav-search").val(),
+                action: "search_suggestion",
+            };
+            const url = '/ajax';
+            const requestType = "GET";
+            const async = false;
+            const callback = (data) => response(data);
+            sendRequest(data, url, requestType, async, callback);
         }
     });
 
-    $(".savet").click(function (e) {
-        var post_id = $(this).children("p").html()
-        var action = "save_post"
-        $.ajax({
-            type: "GET",
-            url: '/ajax',
-            data: {
-                post_id: post_id,
-                action: action,
-            },
-            success: $.proxy(function(data) {
-                if(data.stat == "created"){
-                    $(this).children("i").css("color","#2962ff")
-                }
-                else{
-                    $(this).children("i").css("color","#808080")
-                }
-            }, this)
-        });
-    })
+    $(".savet").on('click', () => {
+        const _el =  $(".savet");
+        const data = {
+            post_id: _el.children("p").html(),
+            action: "save_post"
+        };
+        const url = '/ajax';
+        const requestType = "GET";
+        const async = false;
+        const callback = (data) => {
+            data.stat == "created" ? $(_el).children("i").css("color","#2962ff") :  $(_el).children("i").css("color","#808080");
+        };
+        sendRequest(data, url, requestType, async, callback);
+    });
 
-    $(".temp-class").keypress(function (e) {
-        var key = e.which
-        if(key == 13){
-            var comp = $(e.target)
-            if(comp.val()=="") return
-            var comment_id = comp.closest(".collapse").attr("id")
-            var action = "make_reply"
-            $.ajax({
-                type: "GET",
-                url: '/ajax',
-                data: {
-                    comment_id: comment_id,
+    $(".temp-class").on('keypress', (e) => {
+        const _el = $(".temp-class");
+        const key = e.which;
+        if (key == 13) {
+            const comp = $(e.target);
+            if (comp.val()=="") return;
+            const data = {
+                comment_id: comp.closest(".collapse").attr("id"),
                     reply: comp.val(),
-                    action: action,
-                },
-                success: $.proxy(function(data) {
-                    comp.val("")
-                    var reply_template = $(".reply-template").clone()
-                    reply_template.css("display","block")
-                    reply_template.find("#temp-reply-img").attr("src",data.user_image)
-                    reply_template.find("#temp-reply-link").attr("href",data.url)
-                    reply_template.find("#temp-reply-name").html(data.user_name)
-                    reply_template.find("#temp-reply").html(data.rep)
-                    comp.parent().parent().parent().parent().next().append(reply_template)
-                }, this)
-            });
+                    action: "make_reply"
+            };
+            const url = '/ajax';
+            const requestType = "GET";
+            const async = false;
+            const callback = (data) => {
+                comp.val("");
+                const replyTemplate = $(".reply-template").clone();
+                replyTemplate.css("display","block");
+                replyTemplate.find("#temp-reply-img").attr("src",data.user_image);
+                replyTemplate.find("#temp-reply-link").attr("href",data.url);
+                replyTemplate.find("#temp-reply-name").html(data.user_name);
+                replyTemplate.find("#temp-reply").html(data.rep);
+                comp.parent().parent().parent().parent().next().append(reply_template);
+            };
+            sendRequest(data, url, requestType, async, callback);
         }
-    })
-    $(".temp-follow-msg").click(function (e) {
-        var comp = $(e.target)
-        if(!e.target.matches('button')) return
-        if(comp.html() != "Follow" && comp.html() != "Following") return
-        var action = "follow"
-        var user_id = comp.attr("id")
-        $.ajax({
-            type: "GET",
-            url: '/ajax',
-            data: {
-                user_id: user_id,
-                action: action,
-            },
-            success: $.proxy(function(data) {
-                if(data.stat == 'followed'){
-                    comp.html("Following")
-                }
-                else {
-                    comp.html("Follow")
-                }
-            }, this)
-        });
-    })
+    });
+
+    $(".temp-follow-msg").on('click', (e) => {
+        const _el = $(".temp-follow-msg");
+        const comp = $(e.target)
+        if (!e.target.matches('button')) return;
+        if (comp.html() != "Follow" && comp.html() != "Following") return;
+        const data = {
+            user_id: comp.attr("id"),
+            action: "follow"
+        };
+        const url = '/ajax';
+        const requestType = "GET";
+        const async = false;
+        const callback = (data) => {
+            data.stat == 'followed' ? comp.html("Following") : comp.html("Follow");
+        };
+        sendRequest(data, url, requestType, async, callback);
+    });
 
     $(".drop-clk").click(function (e) {
         var action = "get_notifications"
@@ -325,11 +306,11 @@ $( document ).ready(function() {
 var myVar = setInterval(updateNotification, 10000);
 
 function updateNotification() {
-    let data = { action: "get_notification_num"};
-    let url = "/ajax";
-    let requestType = "GET";
-    let async = false;
-    let callback = (data) => {
+    const data = { action: "get_notification_num"};
+    const url = "/ajax";
+    const requestType = "GET";
+    const async = false;
+    const callback = (data) => {
         if(data.num == "none") return;
         let _el = $("#notification-badge");
             if(data.num > 9) {
