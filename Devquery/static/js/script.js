@@ -322,7 +322,7 @@ $( document ).ready(function() {
     });
 })
 
-var myVar = setInterval(updateNotification, 2000);
+var myVar = setInterval(updateNotification, 10000);
 
 function updateNotification() {
     $.ajax({
