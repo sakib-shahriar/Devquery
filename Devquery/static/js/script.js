@@ -325,28 +325,27 @@ $( document ).ready(function() {
 var myVar = setInterval(updateNotification, 10000);
 
 function updateNotification() {
-    $.ajax({
-        type: "GET",
-        url: '/ajax',
-        data: {
-            action: "get_notification_num",
-        },
-        success: $.proxy(function(data) {
-            if(data.num == "none") return
+    let data = { action: "get_notification_num"};
+    let url = "/ajax";
+    let requestType = "GET";
+    let async = false;
+    let callback = (data) => {
+        if(data.num == "none") return;
+        let _el = $("#notification-badge");
             if(data.num > 9) {
-                $("#notification-badge").html("9+")
-                $("#notification-badge").css("display", "block")
+                _el.html("9+");
+                _el.css("display", "block");
             }
             else if(data.num == 0) {
-                $("#notification-badge").html("0")
-                $("#notification-badge").css("display", "none")
+                _el.html("0");
+                _el.css("display", "none");
+
             }
             else{
-                $("#notification-badge").html(data.num)
-                $("#notification-badge").css("display", "block")
+                _el.html(data.num);
+                _el.css("display", "block");
             }
-
-        }, this)
-    });
+    };
+    sendRequest(data, url, requestType, async, callback);
 }
 
