@@ -1,0 +1,20 @@
+{% load static %}
+<div class="mt-4 border-thick shadow-sm pt-2 mt-3 mb-5 reply">
+    <div class="container">
+        <div class="row comment-owner rep">
+            <div class="col-xl-6 col-lg-6 col-md-10">
+                <a href="{% url 'profile' reply.user.username%}">{% if  reply.user.userinfo.image %}
+                    <img src="{{ reply.user.userinfo.image.url }}">
+                {% else %}
+                    <img src="{% static 'img/user.png' %}">
+                {% endif %}<span>{{ reply.user.first_name }}&nbsp;{{ reply.user.last_name }}</span></a>
+            </div>
+            <div class="input-group"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div>
+            <p class="px-3">{{ reply.reply }}</p>
+        </div>
+    </div>
+</div>

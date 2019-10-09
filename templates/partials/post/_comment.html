@@ -1,0 +1,59 @@
+{% load static %}
+<div class="mb-5 temp-class-alt">
+    <div class="border-thick shadow-sm pt-2">
+        <div class="container">
+            <div class="row comment-owner">
+                <div class="col-xl-6 col-lg-6 col-md-10">
+                    <a href="{% url 'profile' comment.user.username%}">{% if  comment.user.userinfo.image %}
+                        <img src="{{ comment.user.userinfo.image.url }}">
+                    {% else %}
+                        <img src="{% static 'img/user.png' %}">
+                    {% endif %}<span>{{ comment.user.first_name }}&nbsp;{{ comment.user.last_name }}</span></a>
+                </div>
+                <div class="input-group"></div>
+            </div>
+        </div>
+        <div class="container">
+            <div>
+                <p class="px-3">{{ comment.comment }}</p>
+            </div>
+
+            <div class="post-status">
+                <div class="row">
+                    <p class="d-none">{{ comment.id }}</p>
+                    <div class="col-3 text-left">
+                        <button {% if voted.vote_direction == "plus"%} style="color:#2962ff;" {% endif %}
+                                                                       class="btn comment-status-btn" id="plus">
+                            <i class="far fa-plus-square"></i>&nbsp;&nbsp;<span>{{ cpvVote }}</span>
+                        </button>
+                    </div>
+                    <div class="col-3 text-left">
+                        <button {% if voted.vote_direction == "minus"%} style="color:#2962ff;" {% endif %} class="btn comment-status-btn" id="minus">
+                            <i class="far fa-minus-square"></i>&nbsp;&nbsp;<span>{{ cnVote }}</span>
+                        </button>
+                    </div>
+                    <div class="col-6 text-center">
+                        <button class="btn comment-status-btn" type="button" data-toggle="collapse" data-target="#{{ comment.id }}" aria-expanded="false" aria-controls="collapseExample" style="width: 80%;">
+                            <i class="far fa-comment"></i>&nbsp;&nbsp;<span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="collapse" id={{ comment.id }}>
+            <div class="container pt-4">
+                <div class="input-group">
+                    <textarea class="form-control" placeholder="Write your reply" aria-label="With textarea" id="text-area-reply"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="reply-box">
+        {% for reply in replies %}
+            {% include 'partials/post/_reply.html' %}
+        {% endfor %}
+    </div>
+</div>
+

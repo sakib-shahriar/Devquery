@@ -130,27 +130,15 @@ $( document ).ready(function() {
         if (key == 13) {
             const comment = $(_el).val();
             if (comment == "") return;
+            _el.val("");
             const data = {
                 post_id: $("#post_id").html(),
-                action: "make_comment",
                 comment: comment
             };
-            const url = '/ajax';
+            const url = '/post/getComment';
             const requestType = "GET";
             const async = false;
-            const callback = (data) => {
-                _el.val("");
-                const commentTemplate  = $(".comment-template").clone();
-                commentTemplate.css("display", "block");
-                commentTemplate.find("img").attr("src", data.user_image)
-                commentTemplate.find("#temp-comment-link").attr("href", data.url)
-                commentTemplate.find("img").next().html(data.user_name)
-                commentTemplate.find(".temp-comment").html(data.comment)
-                commentTemplate.find("#toggle-btn").attr("data-target","#"+data.cmt_id)
-                commentTemplate.find("#temp-collapse").attr("id",data.cmt_id)
-                commentTemplate.find(".temp-comment-id").html(data.cmt_id)
-                $(".comment-space").append(commentTemplate)
-            };
+            const callback = (data) => $(".comment-space").append(data);
             sendRequest(data, url, requestType, async, callback);
         }
     });
@@ -197,25 +185,18 @@ $( document ).ready(function() {
         const key = e.which;
         if (key == 13) {
             const comp = $(e.target);
-            if (comp.val()=="") return;
+            const reply = comp.val();
+            if (reply == "") return;
+            comp.val("");
             const data = {
                 comment_id: comp.closest(".collapse").attr("id"),
-                    reply: comp.val(),
-                    action: "make_reply"
+                reply: reply,
             };
-            const url = '/ajax';
+            const url = '/post/getReply';
             const requestType = "GET";
             const async = false;
-            const callback = (data) => {
-                comp.val("");
-                const replyTemplate = $(".reply-template").clone();
-                replyTemplate.css("display","block");
-                replyTemplate.find("#temp-reply-img").attr("src",data.user_image);
-                replyTemplate.find("#temp-reply-link").attr("href",data.url);
-                replyTemplate.find("#temp-reply-name").html(data.user_name);
-                replyTemplate.find("#temp-reply").html(data.rep);
-                comp.parent().parent().parent().parent().next().append(reply_template);
-            };
+            const container = comp.parent().parent().parent().parent().next();
+            const callback = (data) => container.append(data);
             sendRequest(data, url, requestType, async, callback);
         }
     });

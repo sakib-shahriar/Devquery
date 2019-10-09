@@ -1,16 +1,15 @@
 from django.http import JsonResponse
-from post.models import Post, Vote, CommentVote, Comment, Reply
+from post.models import Vote, CommentVote, Comment
 from profilesection.models import Follow
 from newsfeed.models import Notification
-from datetime import datetime
 from django.contrib.auth.models import User
 from post.models import Post, Saved
 from django.db.models import Q
-from django.contrib import auth
 from django.utils import timesince
 from django.urls import reverse
 from django.db.models import Count
 from django.contrib.staticfiles.templatetags.staticfiles import static
+from common.utils.commonUtils import generate_notification
 
 
 def response(request):
@@ -145,30 +144,6 @@ def response(request):
             res['stat'] = 'created'
         return JsonResponse(res)
 
-    if request.GET['action'] == 'make_comment':
-        comment = request.GET['comment']
-        post_id = request.GET['post_id']
-        post = Post.objects.get(pk=post_id)
-        cmt = Comment.objects.create(comment=comment, time=datetime.now(), post=post, user=request.user)
-        cmt.save()
-        user_image = request.user.userinfo.image
-        if user_image:
-            user_image = request.user.userinfo.image.url
-        else:
-            user_image = "/static/img/user.png"
-
-        user = User.objects.get(post=post)
-        generate_notification(maker=request.user, owner=user, post=post, notf_type="comment")
-
-        res = {
-            'user_image': user_image,
-            'user_name': request.user.first_name + " " + request.user.last_name,
-            'comment': comment,
-            'cmt_id': cmt.id,
-            'url': reverse('profile', args=(request.user.username,))
-        }
-        return JsonResponse(res)
-
     if request.GET['action'] == 'search_suggestion':
         text = request.GET['text']
         data = []
@@ -197,29 +172,6 @@ def response(request):
         else:
             Saved.objects.create(post=post, user=request.user)
             res['stat'] = "created"
-        return JsonResponse(res)
-
-    if request.GET['action'] == 'make_reply':
-        comment_id = request.GET['comment_id']
-        comment = Comment.objects.get(pk=comment_id)
-        reply = request.GET['reply']
-        Reply.objects.create(comment=comment, reply=reply, time=datetime.now(), user=request.user)
-        user_image = request.user.userinfo.image
-        if user_image:
-            user_image = request.user.userinfo.image.url
-        else:
-            user_image = "/static/img/user.png"
-
-        user = User.objects.get(comment=comment)
-        post = Post.objects.get(comment=comment)
-        generate_notification(maker=request.user, owner=user, post=post, notf_type="reply")
-
-        res = {
-            'user_image': user_image,
-            'user_name': request.user.first_name + " " + request.user.last_name,
-            'rep': reply,
-            'url': reverse('profile', args=(request.user.username,))
-        }
         return JsonResponse(res)
 
     if request.GET['action'] == 'follow':
@@ -268,52 +220,6 @@ def response(request):
             'num': notf_num
         }
         return JsonResponse(res)
-
-
-def generate_notification(maker, owner, post, notf_type, vote_direction=""):
-    if notf_type == "follow":
-        notification = maker.first_name + " " + maker.last_name + " has started to follow you"
-        post = Post.objects.all().first()
-        Notification.objects.create(notification=notification, time=datetime.now(), is_read=False, owner=owner,
-                                    maker=maker, post=post, notf_type=notf_type)
-
-    elif notf_type == "reply":
-        if maker == owner:
-            return
-        post_owner = User.objects.get(post=post)
-        if post_owner == owner:
-            post_owner = "your"
-        else:
-            post_owner = post_owner.first_name + " " + post_owner.last_name + "'s"
-        notification = maker.first_name + " " + maker.last_name + " replied to your comment in " + post_owner + " post"
-        Notification.objects.create(notification=notification, time=datetime.now(), is_read=False, owner=owner,
-                                    maker=maker, post=post, notf_type=notf_type)
-
-    elif notf_type == "comment":
-        if maker == owner:
-            return
-        notification = maker.first_name + " " + maker.last_name + " commented on your post"
-        Notification.objects.create(notification=notification, time=datetime.now(), is_read=False, owner=owner,
-                                    maker=maker, post=post, notf_type=notf_type)
-
-    elif notf_type == "comment_vote":
-        if maker == owner:
-            return
-        post_owner = User.objects.get(post=post)
-        if post_owner == owner:
-            post_owner = "your"
-        else:
-            post_owner = post_owner.first_name + " " + post_owner.last_name + "'s"
-        notification = maker.first_name + " " + maker.last_name + " " + vote_direction + " your comment in " + post_owner + " post"
-        Notification.objects.create(notification=notification, time=datetime.now(), is_read=False, owner=owner,
-                                    maker=maker, post=post, notf_type=notf_type)
-
-    if notf_type == "vote":
-        if maker == owner:
-            return
-        notification = maker.first_name + " " + maker.last_name + " " + vote_direction + " your post"
-        Notification.objects.create(notification=notification, time=datetime.now(), is_read=False, owner=owner,
-                                    maker=maker, post=post, notf_type=notf_type)
 
 
 
