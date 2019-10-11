@@ -1,80 +1,75 @@
 $( document ).ready(function() {
-    $("#form-register").submit(function (e) {
-        var action = "registration_validation"
-        var username = $("#username-register").val()
-        var email = $("#email-register").val()
-        $.ajax({
-            type: "GET",
-            async: false,
-            url: '/ajax',
-            data: {
-                username: username,
-                email: email,
-                action: action,
-            },
-            success: $.proxy(function(data) {
-                if(data.stat != "success"){
-                    e.preventDefault()
-                    $(".msg").html(data.stat)
-                    $(".msg").css("display", "block")
+    $("#form-register").on('submit', (e) => {
+        const data = {
+            username: $("#username-register").val(),
+            email: $("#email-register").val(),
+            action: "registration_validation",
+        };
+        const url = "/ajax";
+        const requestType = "GET";
+        const async = false;
+        const callback = (data) => {
+            const message = $(".msg");
+            if (data.stat != "success") {
+                e.preventDefault();
+                message.html(data.stat);
+                message.css("display", "block");
+            }
+            else {
+                const tags = $('[name="tags[]"]:checked');
+                if (tags.length < 2) {
+                    e.preventDefault();
+                    message.html("You have to select at least 2 tags");
+                    message.css("display", "block")
                 }
-                else{
-                    var tags = $('[name="tags[]"]:checked')
-                    if(tags.length < 2){
-                        e.preventDefault()
-                        $(".msg").html("You have to select at least 2 tags")
-                        $(".msg").css("display", "block")
-                    }
-                }
-            }, this)
-        });
-    })
+            }
+        };
+        sendRequest(data, url, requestType, async, callback);
+    });
 
-
-    $(".status-btn").click(function (e) {
-        var action
-        if($(this).attr('id') == "plus") action = "plus_vote"
-        else if($(this).attr('id') == "minus") action = "minus_vote"
-        else return
-        var post_id = $(this).parent().parent().children("p").html()
-        $.ajax({
-            type: "GET",
-            url: '/ajax',
-            data: {
-                action:action,
-                post_id:post_id,
-            },
-            success: $.proxy(function(data) {
-                if(data.stat == "created"){
-                    $(this).css('color','#2962ff')
-                    var vote = parseInt($(this).children("span").html())
-                    $(this).children("span").html(vote + 1)
+    $(".status-btn").on('click', (e) => {
+        const _el = $(e.currentTarget);
+        if (!_el.hasClass('plus') && !_el.hasClass('minus')) return;
+        const data = {
+            action: _el.hasClass('plus') ? "plus_vote" : "minus_vote",
+            post_id: _el.closest('.row').attr('id')
+        };
+        const url = "/ajax";
+        const requestType = "GET";
+        const async = false;
+        const callback = (data) => {
+            let label = _el.find(".vote-count");
+            if (data.stat == "created") {
+                $(_el).css('color','#2962ff');
+                let vote = parseInt(label.html());
+                label.html(vote + 1);
+            }
+            else if (data.stat == "deleted") {
+                _el.css('color','black');
+                let vote = parseInt(label.html());
+                label.html(vote - 1)
+            }
+            else {
+                if (_el.hasClass('plus')) {
+                    label = _el.parent().next().find(".vote-count");
+                    let vote = parseInt(label.html());
+                    label.html(vote - 1);
+                    _el.parent().next().find(".minus").css('color','black');
                 }
-                else if(data.stat == "deleted"){
-                    $(this).css('color','black')
-                    var vote = parseInt($(this).children("span").html())
-                    $(this).children("span").html(vote - 1)
+                else {
+                    label = _el.parent().prev().find(".vote-count");
+                    let vote = parseInt(label.html());
+                    label.html(vote - 1);
+                    _el.parent().prev().find(".plus").css('color','black');
                 }
-                else{
-                    if($(this).attr('id') == "plus") {
-                        var vote = parseInt($(this).parent().next().children("button").children("span").html())
-                        $(this).parent().next().children("button").children("span").html(vote - 1)
-                        $(this).parent().next().children("button").css('color','black')
-                    }
-                    else {
-
-                        var vote = parseInt($(this).parent().prev().children("button").children("span").html())
-                        $(this).parent().prev().children("button").children("span").html(vote - 1)
-                        $(this).parent().prev().children("button").css('color','black')
-                    }
-                    vote = parseInt($(this).children("span").html())
-                    $(this).css('color','#2962ff')
-                    $(this).children("span").html(vote + 1)
-                }
-            }, this)
-        })
-    })
-
+                label = _el.find(".vote-count");
+                let vote = parseInt(label.html());
+                _el.css('color','#2962ff');
+                label.html(vote + 1);
+            }
+        };
+        sendRequest(data, url, requestType, async, callback);
+    });
 
     $(".temp-class").click(function (e) {
         var comp = $(e.target)
@@ -148,7 +143,6 @@ $( document ).ready(function() {
             'minRows': 2,
             'maxRows': 0
         })
-
     });
 
     $( ".nav-search" ).autocomplete({
@@ -165,8 +159,8 @@ $( document ).ready(function() {
         }
     });
 
-    $(".savet").on('click', () => {
-        const _el =  $(".savet");
+    $(".save-post").on('click', (e) => {
+        const _el =  $(e.currentTarget);
         const data = {
             post_id: _el.children("p").html(),
             action: "save_post"
@@ -219,47 +213,14 @@ $( document ).ready(function() {
         sendRequest(data, url, requestType, async, callback);
     });
 
-    $(".drop-clk").click(function (e) {
-        var action = "get_notifications"
-        $.ajax({
-            type: "GET",
-            url: '/ajax',
-            data: {
-                action: action,
-            },
-            success: $.proxy(function(data) {
-                $(".pop-not-list").empty()
-                if(data.length > 0){
-                    data.forEach(function (notf) {
-                        var notification = $("#not-template").clone()
-                        notification.find("#notf-detail").html(notf.notification)
-                        notification.find("#notf-time").html(notf.time)
-                        notification.find("#notf-id").html(notf.id)
-                        notification.find("#notf-image").attr("src", notf.image)
-                        notification.find("#notf-link").attr("href", notf.url)
-                        notification.css("display", "block")
-                        console.log(notf)
-                        if(notf.is_read == '0'){
-                            notification.find("#notf-link").addClass("not-read")
-                        }
-                        else {
-                            notification.find("#notf-link").removeClass("not-read")
-                        }
-                        $(".pop-not-list").append(notification)
-                    })
-                    var notf_btns = $("#not-btn").clone()
-                    notf_btns.css("display", "block")
-                    $(".pop-not-list").append(notf_btns)
-                }
-                else{
-                    var notification = $("#not-template-empty").clone()
-                    notification.css("display", "block")
-                    $(".pop-not-list").append(notification)
-                }
-
-            }, this)
-        });
-    })
+    $(".drop-clk").on('click', () => {
+        const data = {};
+        const url = "/getPopupNotification";
+        const requestType = "GET";
+        const async = false;
+        const callback = (data) => $(".pop-not-list").empty().append(data);
+        sendRequest(data, url, requestType, async, callback);
+    });
 
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
@@ -282,11 +243,11 @@ $( document ).ready(function() {
             }
         }
     });
-})
+});
 
-var myVar = setInterval(updateNotification, 10000);
+setInterval(updateNotification, 10000);
 
-function updateNotification() {
+const updateNotification = () => {
     const data = { action: "get_notification_num"};
     const url = "/ajax";
     const requestType = "GET";
@@ -309,5 +270,5 @@ function updateNotification() {
             }
     };
     sendRequest(data, url, requestType, async, callback);
-}
+};
 

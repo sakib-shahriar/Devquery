@@ -1,0 +1,31 @@
+{% load static %}
+{% load humanize %}
+{% for notification, url in notifications %}
+    <div class="col comment mb-1" id="not-template">
+        <a class="container-fluid {% if not notification.is_read %}  not-read {% endif %}" id="notf-link" href="{{ url }}">
+            <div class="row">
+                <div class="col-lg-2 col-md-2 cmnt-img">
+                    {% if notification.maker.userinfo.image  %}
+                        <img id="notf-image" src="{{ notification.maker.userinfo.image.url }}">&nbsp;
+                    {% else %}
+                        <img id="notf-image" src="{% static 'img/user.png' %}">&nbsp;
+                    {% endif %}
+                </div>
+                <div class="col-lg-10 col-md-10 cmnt-body">
+                    <p class="m-0 w-100 text-dark" id="notf-detail">{{ notification.notification }}</p>
+                    <p class="py-0 m-0 text-dark  font-italic" id="notf-time">{{ notification.time | timesince }}</p>
+                </div>
+            </div>
+            <p id="notf-id" class="d-none">{{ notification.id }}</p>
+        </a>
+    </div>
+{% endfor %}
+{% if notifications %}
+    <div class="col-btn" id="not-btn">
+        <button id="btn-view-all" onclick="location.href='{% url 'notification'%}'">View All</button>
+    </div>
+{% else %}
+    <div class="col comment mb-1 text-center" id="not-template-empty" style="height: 100px">
+        <h5 class="text-center pt-4">No Notifications To Show</h5>
+    </div>
+{% endif %}

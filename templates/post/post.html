@@ -9,7 +9,7 @@
             <div>
                 <div class="row">
                     <div class="col-6 text-left inside-post-other-info">
-                        <button class="btn other-btn savet p-2"><i class="far fa-bookmark"
+                        <button class="btn other-btn save-post p-2"><i class="far fa-bookmark"
                                 {% if saved %} style="color: #2962ff;" {% endif %}></i><p class="d-none">{{ post.id }}</p></button>
                         <button class="btn other-btn p-2"><i class="far fa-envelope"></i></button>
                     </div>
@@ -71,17 +71,17 @@
             <hr>
             <div class="post-status">
                 <div class="row">
-                    <p class="d-none">{{ post.id }}</p>
+                    <p class="d-none post-id">{{ post.id }}</p>
                     <div class="col-3 text-left">
                         <button {% if myVote.vote_direction == "plus"%} style="color:#2962ff;" {% endif %}
-                                                                        class="btn status-btn" id="plus">
-                            <i class="far fa-plus-square"></i>&nbsp;&nbsp;<span>{{ pVote }}</span>
+                                                                        class="btn status-btn plus">
+                            <i class="far fa-plus-square"></i>&nbsp;&nbsp;<span class="vote-count">{{ pVote }}</span>
                         </button>
                     </div>
                     <div class="col-3 text-left">
                         <button {% if myVote.vote_direction == "minus"%} style="color:#2962ff;" {% endif %}
-                                                                         class="btn status-btn" id="minus">
-                            <i class="far fa-minus-square"></i>&nbsp;&nbsp;<span>{{ nVote }}</span>
+                                                                         class="btn status-btn minus">
+                            <i class="far fa-minus-square"></i>&nbsp;&nbsp;<span class="vote-count">{{ nVote }}</span>
                         </button>
                     </div>
                     <div class="col-6 text-center">

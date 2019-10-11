@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from post.models import Post, Tag, Vote, Comment, Saved
-from profilesection.models import Follow
-from newsfeed.models import Notification
-from django.contrib.auth.models import User
-from profilesection.models import Interest
-from django.db.models import Q, Count
+from profilesection.models import Interest, Follow
 from datetime import datetime
 from django.contrib import messages
+from newsfeed.models import Notification
+from django.contrib.auth.models import User
+from django.db.models import Q
+from django.utils import timesince
+from django.urls import reverse
+from django.db.models import Count
+from django.contrib.staticfiles.templatetags.staticfiles import static
 
 
 class MainView(TemplateView):
@@ -133,7 +136,7 @@ class SavedView(TemplateView):
 
 
 class TagPostView(TemplateView):
-    template_name = 'newsfeed/tagpost.html'
+    template_name = 'newsfeed/index.html'
 
     def get(self, request, name, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -175,4 +178,20 @@ class NotificationView(TemplateView):
         context = {
             'notifications': notifications
         }
-        return render(request,self.template_name, context)
+        return render(request, self.template_name, context)
+
+
+class NotificationPopupView(TemplateView):
+    template_name = 'partials/_notification.html'
+
+    def get(self, request, *args, **kwargs):
+        notifications = Notification.objects.filter(owner=request.user).order_by('-time')[:7]
+        urls = []
+        for notification in notifications:
+            if notification.notf_type == "follow":
+                urls.append(reverse('make_read', args=(notification.owner.username, notification.id, "profile")))
+            else:
+                urls.append(reverse('make_read', args=(notification.post.id, notification.id, "post")))
+
+        context = {'notifications': zip(notifications, urls)}
+        return render(request, self.template_name, context if notifications else {})
