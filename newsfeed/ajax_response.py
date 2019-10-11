@@ -188,30 +188,6 @@ def response(request):
             res['stat'] = 'followed'
         return JsonResponse(res)
 
-    if request.GET['action'] == 'get_notifications':
-        notifications = Notification.objects.filter(owner=request.user).order_by('-time')[:7]
-        resp = []
-        for notification in notifications:
-            res = {}
-            res['notification'] = notification.notification
-            res['id'] = notification.id
-            res['name'] = notification.maker.first_name + " " + notification.maker.first_name
-            if notification.maker.userinfo.image:
-                res['image'] = notification.maker.userinfo.image.url
-            else:
-                res['image'] = static('img/user.png')
-            res['time'] = timesince.timesince(notification.time)
-            if notification.is_read:
-                res['is_read'] = '1'
-            else:
-                res['is_read'] = '0'
-            if notification.notf_type == "follow":
-                res['url'] = reverse('make_read', args=(notification.owner.username, notification.id, "profile"))
-            else:
-                res['url'] = reverse('make_read', args=(notification.post.id, notification.id, "post"))
-            resp.append(res)
-        return JsonResponse(resp, safe=False)
-
     if request.GET['action'] == 'get_notification_num':
         if not request.user.is_authenticated:
             return JsonResponse({'num': 'none'})
